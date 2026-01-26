@@ -68,10 +68,8 @@ src/
 ## 🌱 Future Improvements
 
 - Filter tasks (All / Active / Completed)
-- Clear completed tasks
 - Dark mode
 - Edit task text
-- Drag & drop reordering
 
 ---
 
