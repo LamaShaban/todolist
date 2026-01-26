@@ -4,6 +4,7 @@ A simple, clean, and user-friendly To-Do List application built with React.
 The app allows users to add, complete, and delete tasks, with automatic saving using Local Storage so tasks persist after refreshing the page.
 
 ---
+![To-Do List App](./public/todolist-app.png)
 
 ## ✨ Features
 
@@ -28,9 +29,7 @@ The app allows users to add, complete, and delete tasks, with automatic saving u
 - Local Storage API
 
 ---
-## 📸 Preview
 
-![To-Do List App](./public/todolist-app.png)
 
 ## 🚀 Getting Started
 
