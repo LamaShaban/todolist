@@ -3,7 +3,10 @@ import { FaCheckCircle, FaRegCircle, FaTimes } from "react-icons/fa";
 import "./App.css";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
+const [tasks, setTasks] = useState(() => {
+  const savedTasks = localStorage.getItem("tasks");
+  return savedTasks ? JSON.parse(savedTasks) : [];
+});
   const taskRef = useRef();
 
   const handleAddTask = () => {
