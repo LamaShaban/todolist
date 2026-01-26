@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { FaCheckCircle, FaRegCircle, FaTimes } from "react-icons/fa";
 import "./App.css";
 
@@ -7,8 +7,13 @@ const [tasks, setTasks] = useState(() => {
   const savedTasks = localStorage.getItem("tasks");
   return savedTasks ? JSON.parse(savedTasks) : [];
 });
-  const taskRef = useRef();
 
+
+  const taskRef = useRef();
+  
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
   const handleAddTask = () => {
     const text = taskRef.current.value.trim();
     if (!text) return;
