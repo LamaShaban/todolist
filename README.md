@@ -28,6 +28,9 @@ The app allows users to add, complete, and delete tasks, with automatic saving u
 - Local Storage API
 
 ---
+## 📸 Preview
+
+![To-Do List App](./public/todolist-app.png)
 
 ## 🚀 Getting Started
 
