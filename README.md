@@ -34,7 +34,7 @@ The app allows users to add, complete, and delete tasks, with automatic saving u
 ## 🚀 Getting Started
 
 ### 1. Clone the repository
-git clone https://github.com/your-username/todo-list-react.git
+git clone https://github.com/LamaShaban/todo-list-react.git
 
 ### 2. Navigate to the project folder
 cd todo-list-react
