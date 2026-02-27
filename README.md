@@ -1,77 +1,111 @@
-# 📝 To-Do List App (React)
+# 🚀 Smart Task Management Dashboard
 
-A simple, clean, and user-friendly To-Do List application built with React.
-The app allows users to add, complete, and delete tasks, with automatic saving using Local Storage so tasks persist after refreshing the page.
+A modern and responsive Task Management Dashboard built with React.
+This application allows users to manage tasks efficiently with authentication, filtering, search functionality, and dynamic status updates.
+
 
 ---
-![To-Do List App](./public/todolist-app.png)
 
 ## ✨ Features
 
-- Add new tasks
-- Mark tasks as completed
-- Delete tasks
-- Persistent data using localStorage
-- Add tasks using the Enter key
-- Clean & modern UI
-- Responsive design
+- 🔐 Authentication system using Context API
+- 🔒 Protected routes with React Router
+- ➕ Create, update, and delete tasks
+- 🔄 Dynamic task status updates (Pending / In Progress / Completed)
+- 🔍 Search functionality
+- 🎯 Task filtering by status and priority
+- 📊 Dashboard statistics (Total tasks, Completed tasks, Progress rate)
+- 🌐 API integration for external data
+- 💾 Persistent state management
+- 🎨 Modern and responsive UI design
 
 ---
 
 ## 🛠️ Built With
 
-- React (Hooks)
-  - useState
-  - useEffect
-  - useRef
-- CSS (custom styling)
-- React Icons
-- Local Storage API
-
----
-
-
-## 🚀 Getting Started
-
-### 1. Clone the repository
-git clone https://github.com/LamaShaban/todo-list-react.git
-
-### 2. Navigate to the project folder
-cd todo-list-react
-
-### 3. Install dependencies
-npm install
-
-### 4. Run the app
-npm start
-
-The app will run on:
-http://localhost:3000
-
----
-
-## 💾 Local Storage
-
-- Tasks are loaded from localStorage when the app starts
-- Any change (add / delete / complete) is automatically saved
-- Tasks remain after page refresh or browser restart
+- React.js
+- React Router DOM
+- Context API
+- JavaScript (ES6+)
+- CSS3 (Modern UI Design)
+- REST API Integration
 
 ---
 
 ## 📂 Project Structure
 
 src/
-│── App.js
-│── App.css
-│── index.js
+│
+├── components/
+│   ├── Navbar.jsx
+│   ├── TaskCard.jsx
+│   ├── TaskForm.jsx
+│   ├── Filters.jsx
+│
+├── pages/
+│   ├── Login.jsx
+│   ├── Dashboard.jsx
+│
+├── context/
+│   ├── AuthContext.jsx
+│   ├── TaskContext.jsx
+│
+├── services/
+│   ├── api.js
+│
+├── App.js
+├── main.jsx
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+git clone https://github.com/your-username/smart-task-dashboard.git
+
+### 2. Navigate to the project directory
+cd smart-task-dashboard
+
+### 3. Install dependencies
+npm install
+
+### 4. Start the development server
+npm run dev
+or
+npm start
+
+The app will run at:
+http://localhost:3000
+
+---
+
+## 🔐 Authentication Flow
+
+- Users must log in to access the dashboard
+- Protected routes prevent unauthorized access
+- User state is managed globally using Context API
+
+---
+
+## 📊 Dashboard Overview
+
+The dashboard provides:
+
+- Total number of tasks
+- Completed tasks count
+- Task completion percentage
+- Real-time updates when task status changes
 
 ---
 
 ## 🌱 Future Improvements
 
-- Filter tasks (All / Active / Completed)
+- Drag & drop task reordering
 - Dark mode
-- Edit task text
+- Backend integration with database
+- User roles and permissions
+- Notifications system
+- Pagination for large datasets
 
 ---
 
@@ -79,7 +113,4 @@ src/
 
 Lama Shaban  
 Frontend Developer (React)
-
----
-
 
