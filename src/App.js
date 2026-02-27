@@ -1,6 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import { FaCheckCircle, FaRegCircle, FaTimes } from "react-icons/fa";
+import "./index.css";
 import "./App.css";
+
 
 function App() {
 const [tasks, setTasks] = useState(() => {
