@@ -35,7 +35,7 @@ This application allows users to manage tasks efficiently with authentication, f
 ## 🚀 Getting Started
 
 ### 1. Clone the repository
-git clone https://github.com/your-username/todolist.git
+git clone https://github.com/LamaShaban/todolist.git
 
 ### 2. Navigate to the project directory
 cd todolist
