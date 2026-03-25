@@ -3,6 +3,7 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 import { useTasks } from "../context/TasksContext";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 
 const STATUS = ["Pending", "In Progress", "Completed"];
 const PRIORITIES = ["Low", "Medium", "High"];
@@ -17,7 +18,7 @@ function formatDate(d) {
 }
 
 export default function TaskListPage() {
-  const { tasks, addTask, editTask, updateStatus, deleteTask } = useTasks();
+  const { tasks, addTask, editTask, updateStatus, deleteTask, setTasks } = useTasks();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -27,6 +28,7 @@ export default function TaskListPage() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [draggingTaskId, setDraggingTaskId] = useState(null);
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -54,6 +56,34 @@ export default function TaskListPage() {
   };
 
   const closeModal = () => setModalOpen(false);
+
+  const handleDragStart = (id, e) => {
+    setDraggingTaskId(id);
+    if (e && e.dataTransfer && e.currentTarget) {
+      const node = e.currentTarget.cloneNode(true);
+      node.style.position = 'absolute';
+      node.style.top = '-9999px';
+      node.style.left = '-9999px';
+      node.style.opacity = '1';
+      document.body.appendChild(node);
+      e.dataTransfer.setDragImage(node, 20, 20);
+      window.requestAnimationFrame(() => document.body.removeChild(node));
+    }
+  };
+  const handleDragOver = (e) => e.preventDefault();
+  const handleDrop = (targetId) => {
+    if (!draggingTaskId || draggingTaskId === targetId) return;
+    setTasks((prev) => {
+      const sourceIndex = prev.findIndex((t) => t.id === draggingTaskId);
+      const targetIndex = prev.findIndex((t) => t.id === targetId);
+      if (sourceIndex < 0 || targetIndex < 0) return prev;
+      const next = [...prev];
+      const [moved] = next.splice(sourceIndex, 1);
+      next.splice(targetIndex, 0, moved);
+      return next;
+    });
+    setDraggingTaskId(null);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -102,38 +132,77 @@ export default function TaskListPage() {
     return list;
   }, [tasks, filterStatus, search, sortBy]);
 
+  const getStatusStyle = (status) => {
+  switch (status) {
+    case "Pending":
+      return "bg-yellow-100 text-yellow-700";
+    case "In Progress":
+      return "bg-blue-100 text-blue-700";
+    case "Completed":
+      return "bg-green-100 text-green-700";
+    default:
+      return "bg-gray-100 text-gray-600";
+  }
+};
+
   return (
     <div className="min-h-screen flex bg-gray-50">
 
-{/* Sidebar */}
-      <aside className="w-64 bg-white shadow-lg p-6 hidden md:flex flex-col">
-        {user && (
-          <div className="flex flex-col items-start mb-10 w-full">
-            
-            {/* User Info */}
-            <div className="flex items-center gap-3 w-full mb-4">
-              <div className="w-11 h-11 rounded-full bg-indigo-600 text-white flex items-center justify-center text-lg font-semibold">
-                {user.email.charAt(0).toUpperCase()}
-              </div>
-              
-              <div className="flex flex-col">
-                <p className="text-sm text-gray-500">Logged in as</p>
-                <p className="font-medium text-gray-600 break-all">
-                  {user.email}
-                </p>
-              </div>
+    {/* Sidebar */}
+    <aside className="w-64 bg-white border-r border-gray-200 h-screen p-6 hidden md:flex flex-col">
+
+      {user && (
+        <div className="mb-10">
+
+          {/* User Section */}
+          <div className="flex items-center gap-3 w-full mb-6">
+            <div className="w-11 h-11 rounded-full bg-indigo-600 text-white flex items-center justify-center text-lg font-semibold shadow-md">
+              {user.email.charAt(0).toUpperCase()}
+            </div>
+
+            <div className="flex flex-col min-w-0 flex-1">
+              <p className="text-xs text-gray-400">Logged in as</p>
+              <p
+                className="font-medium text-gray-700 truncate"
+                title={user.email}
+              >
+                {user.email}
+              </p>
             </div>
           </div>
-        )}
 
-        {/* Navigation */}
-        <nav className="flex flex-col gap-4 text-gray-600">
-          <span className="font-semibold text-indigo-600">Dashboard</span>
-          <span className="cursor-pointer hover:text-indigo-600 transition">
-            Tasks
-          </span>
-        </nav>
-      </aside>
+          {/* Divider */}
+          <div className="h-px bg-gray-200" />
+        </div>
+      )}
+
+      {/* Navigation */}
+      <nav className="flex flex-col gap-2">
+
+        <a
+          href="#"
+          className="group flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-all duration-200"
+        >
+          Dashboard
+        </a>
+
+        <a
+          href="#"
+          className="group flex items-center gap-3 px-4 py-2 rounded-lg bg-indigo-50 text-indigo-600 font-medium border-indigo-600"
+        >
+          <span className="text-lg">📝</span>
+          Tasks
+        </a>
+
+        <button
+          className="group flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all duration-200 w-full text-left"
+        >
+          <LogOut size={18} />
+          Logout
+        </button>
+      </nav>
+
+   </aside>
 
       {/* Main */}
       <main className="flex-1 p-8">
@@ -196,47 +265,82 @@ export default function TaskListPage() {
             <span className="font-medium">Add New Task</span>
           </div>
 
-          {filtered.map((task) => (
-            <div
-              key={task.id}
-              className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition"
-            >
-              <h3 className="font-semibold text-lg text-gray-800 mb-2">
-                {task.title}
-              </h3>
+{filtered.map((task) => (
+  <div
+    key={task.id}
+    draggable
+    onDragStart={(e) => handleDragStart(task.id, e)}
+    onDragOver={handleDragOver}
+    onDrop={() => handleDrop(task.id)}
+    className={`bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-100 ${
+      task.status === "Completed" ? "opacity-70" : ""
+    }`}
+  >
+    <div className="flex justify-between items-start">
 
-              <p className="text-gray-600 text-sm mb-3">
-                {task.description}
-              </p>
+      {/* Left Content */}
+      <div className="flex-1">
 
-              <div className="text-sm text-gray-500 mb-4">
-                Due: {formatDate(task.dueDate)}
-              </div>
+        <h3
+          className={`font-semibold text-lg mb-2 ${
+            task.status === "Completed"
+              ? "line-through text-gray-400"
+              : "text-gray-800"
+          }`}
+        >
+          {task.title}
+        </h3>
 
-              <div className="flex justify-between items-center">
-                <select
-                  value={task.status}
-                  onChange={(e) =>
-                    updateStatus(task.id, e.target.value)
-                  }
-                  className="border rounded-lg p-1 text-sm"
-                >
-                  {STATUS.map((s) => (
-                    <option key={s}>{s}</option>
-                  ))}
-                </select>
+        <p className="text-gray-600 text-sm mb-3">
+          {task.description}
+        </p>
 
-                <div className="flex gap-3 text-gray-500">
-                  <button onClick={() => openEdit(task)}>
-                    <FaEdit />
-                  </button>
-                  <button onClick={() => handleDelete(task.id)}>
-                    <FaTrash />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="text-xs text-gray-400 mb-3">
+          📅 {formatDate(task.dueDate)}
+        </div>
+
+        {/* Status Badge */}
+        <span
+          className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusStyle(
+            task.status
+          )}`}
+        >
+          {task.status}
+        </span>
+
+      </div>
+
+      {/* Right Actions */}
+      <div className="flex flex-col items-center gap-3 ml-4">
+
+        {/* Check Button */}
+        {task.status !== "Completed" && (
+          <button
+            onClick={() => updateStatus(task.id, "Completed")}
+            className="w-9 h-9 rounded-full bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-300 shadow-sm hover:shadow-md transition-all duration-150 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            aria-label="Mark task completed"
+          >
+            {'\u2714'}
+          </button>
+        )}
+
+        <button
+          onClick={() => openEdit(task)}
+          className="p-2 rounded-lg hover:bg-gray-100 transition text-gray-500"
+        >
+          <FaEdit />
+        </button>
+
+        <button
+          onClick={() => handleDelete(task.id)}
+          className="p-2 rounded-lg hover:bg-red-50 hover:text-red-600 transition text-gray-500"
+        >
+          <FaTrash />
+        </button>
+      </div>
+    </div>
+  </div>
+))}
         </div>
 
         {/* Modal */}
