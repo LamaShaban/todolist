@@ -32,39 +32,13 @@ This application allows users to manage tasks efficiently with authentication, f
 
 ---
 
-## 📂 Project Structure
-
-src/
-│
-├── components/
-│   ├── Navbar.jsx
-│   ├── TaskCard.jsx
-│   ├── TaskForm.jsx
-│   ├── Filters.jsx
-│
-├── pages/
-│   ├── Login.jsx
-│   ├── Dashboard.jsx
-│
-├── context/
-│   ├── AuthContext.jsx
-│   ├── TaskContext.jsx
-│
-├── services/
-│   ├── api.js
-│
-├── App.js
-├── main.jsx
-
----
-
 ## 🚀 Getting Started
 
 ### 1. Clone the repository
-git clone https://github.com/your-username/smart-task-dashboard.git
+git clone https://github.com/your-username/todolist.git
 
 ### 2. Navigate to the project directory
-cd smart-task-dashboard
+cd todolist
 
 ### 3. Install dependencies
 npm install
